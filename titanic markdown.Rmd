@@ -1,7 +1,7 @@
 ---
 title: "SQL Titanic"
 author: "Blain Morin"
-date: "11/8/2017"
+date: "11/10/2017"
 output: html_document
 ---
 SQL training completion:
