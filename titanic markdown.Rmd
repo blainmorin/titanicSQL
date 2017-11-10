@@ -10,7 +10,7 @@ SQL training completion:
 ![](SQL Lynda Completion.PNG)
 
 ```{r}
-
+library(tibble)
 ### Connect to the database
 library(RMySQL)
 con2 <- dbConnect(MySQL(),
@@ -35,7 +35,7 @@ dbWriteTable(con2, "titanic_morin", titanic)
 
 ### Test "Show Table" query
 query = "show tables;"
-dbGetQuery(con2, query)
+as.tibble(dbGetQuery(con2, query))
 
 ```
 
@@ -43,7 +43,7 @@ dbGetQuery(con2, query)
 
 ### Test "describe" query
 query2 = "describe titanic_morin"
-dbGetQuery(con2, query2)
+as.tibble(dbGetQuery(con2, query2))
 
 ```
 
@@ -51,7 +51,7 @@ dbGetQuery(con2, query2)
 ### Test "select" query
 
 query3 = "select name, pclass, age, sex from titanic limit 10"
-dbGetQuery(con2, query3)
+as.tibble(dbGetQuery(con2, query3))
 
 ```
 
@@ -65,7 +65,7 @@ The following query selects pclass and survived from my titanic database. It the
 query4 = "select pclass, survived, avg(age) as avg_age from titanic_morin  
           group by pclass, survived;"
 
-dbGetQuery(con2, query4)
+as.tibble(dbGetQuery(con2, query4))
 
 ```
 
@@ -80,7 +80,7 @@ query5 = "select pclass, survived, avg(age) as avg_age from titanic_morin
           where survived=1
           group by pclass, survived;"
 
-dbGetQuery(con2, query5)
+as.tibble(dbGetQuery(con2, query5))
 
 ```
 
@@ -93,7 +93,7 @@ The following query selects name, pclass, survived, and age colums from my titan
 query6 = "select name, pclass, survived, age from titanic_yourlastname 
           where name regexp '^.sen.+';"
 
-dbGetQuery(con2, query6)
+as.tibble(dbGetQuery(con2, query6))
 
 ```
 
@@ -106,7 +106,7 @@ The following query selects name, pclass, survived, and age columns from my tita
 query7 = "select name, pclass, survived, age from titanic_morin
           where name regexp 'Jakob.*$';"
 
-dbGetQuery(con2, query7)
+as.tibble(dbGetQuery(con2, query7))
 
 ```
 
@@ -122,8 +122,8 @@ query8 = "select name, pclass, survived, age from titanic_morin
 query9 = "select name, pclass, survived, age from titanic_morin
           where name regexp ',.*Ivar.*$';"
 
-dbGetQuery(con2, query8)
-dbGetQuery(con2, query9)
+as.tibble(dbGetQuery(con2, query8))
+as.tibble(dbGetQuery(con2, query9))
 
 ```
 
@@ -146,7 +146,7 @@ query10 = "select pclass, sex, age, fare, survived, parch from titanic_morin whe
 
 dfdiedbyclass = dbGetQuery(con2, query10)
 
-dfdiedbyclass
+as.tibble(dfdiedbyclass)
 
 ```
 
