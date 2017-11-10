@@ -76,7 +76,7 @@ The following query selects the pclass and survived from my titanic database. It
 
 ```{r}
 
-query5 = "select pclass, survived, avg(age) as avg_age from titanic_yourlastname
+query5 = "select pclass, survived, avg(age) as avg_age from titanic_morin
           where survived=1
           group by pclass, survived;"
 
@@ -103,7 +103,7 @@ The following query selects name, pclass, survived, and age columns from my tita
 
 ```{r}
 
-query7 = "select name, pclass, survived, age from titanic_yourlastname 
+query7 = "select name, pclass, survived, age from titanic_morin
           where name regexp 'Jakob.*$';"
 
 dbGetQuery(con2, query7)
@@ -116,13 +116,66 @@ Both queries select name, pclass, survived, and age from my titanic db. Both que
 
 ```{r}
 
-query8 = "select name, pclass, survived, age from titanic_yourlastname 
+query8 = "select name, pclass, survived, age from titanic_morin 
           where name regexp 'Ivar.*$';"
 
-query9 = "select name, pclass, survived, age from titanic_yourlastname 
+query9 = "select name, pclass, survived, age from titanic_morin
           where name regexp ',.*Ivar.*$';"
 
 dbGetQuery(con2, query8)
 dbGetQuery(con2, query9)
 
 ```
+
+### More Challenging 1:
+
+Create a data frame with:
+
+pclass
+sex
+age
+fare
+survived
+parch 
+
+Only for people who did not survive.
+
+```{r}
+
+query10 = "select pclass, sex, age, fare, survived, parch from titanic_morin where survived=0;"
+
+dfdiedbyclass = dbGetQuery(con2, query10)
+
+dfdiedbyclass
+
+```
+
+### More Challenging 2:
+
+Create a graph of the average survival over the different classes. Make two distinct lines for male and female passengers. Create this plot using ggplot.
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+
+
+query11 = "select pclass, sex, avg(survived) as avg_survived from titanic_morin  
+          group by pclass, sex;"
+
+dfsurvbyclass = dbGetQuery(con2, query11)
+
+dfsurvbyclass %>%
+  filter(complete.cases(dfsurvbyclass)) %>%
+  ggplot(aes(x = pclass, y = avg_survived)) +
+  geom_line(aes(color = sex), size = 2) +
+  xlab("Passenger Class") +
+  ylab("Proportion who Survived") +
+  theme_minimal() +
+  theme(legend.position = c(0.85, 0.85)) +
+  labs(color = "Sex") +
+  ggtitle("Average Survival by Class, Sex")
+
+```
+
+As we can see from the graph, passenger survival is lower among those in the lower class. Survival among men is also lower when compared to the rates among women. 
